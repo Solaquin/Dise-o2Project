@@ -29,8 +29,8 @@ public class PiecesMovement : MonoBehaviour
             GameObject lineObject = new GameObject("Line_" + i);
             lines[i] = lineObject.AddComponent<LineRenderer>();
             lines[i].positionCount = 2;
-            lines[i].startWidth = 0.07f;
-            lines[i].endWidth = 0.07f;
+            lines[i].startWidth = 0.05f;
+            lines[i].endWidth = 0.05f;
             lines[i].material = new Material(Shader.Find("Sprites/Default")); // Material básico
             lines[i].startColor = Color.green;
             lines[i].endColor = Color.green;
@@ -86,17 +86,47 @@ public class PiecesMovement : MonoBehaviour
     {
         for (int i = 0; i < 6; i++)
         {
-            lines[i].enabled = true;
-            lines[i].SetPosition(0, transform.position);
-            lines[i].SetPosition(1, transform.position + directions[i] * lineLenght);
+            Vector3 startPos = transform.position;
+            Vector3 endPos = transform.position + directions[i] * lineLenght;
 
+            lines[i].enabled = true;
+            lines[i].positionCount = 5; // 1 línea + 2 líneas de la punta
+            lines[i].SetPosition(0, startPos);
+            lines[i].SetPosition(1, endPos);
+
+            // Crear la base de la flecha
+            Vector3 arrowHeadBase = endPos - directions[i] * (lineLenght * 0.2f); // Base de la punta
+
+            Vector3 arrowLeft, arrowRight;
+
+            // Determinar la rotación de la punta de flecha según la dirección
+            if (directions[i] == Vector3.up || directions[i] == Vector3.down)
+            {
+                // Para flechas en el eje Y, rotamos en el plano XZ
+                arrowLeft = arrowHeadBase + Quaternion.Euler(45, 0, 0) * (-directions[i] * 0.1f);
+                arrowRight = arrowHeadBase + Quaternion.Euler(-45, 0, 0) * (-directions[i] * 0.1f);
+            }
+            else
+            {
+                // Para las demás direcciones, rotamos en el plano XY
+                arrowLeft = arrowHeadBase + Quaternion.Euler(0, 45, 0) * (-directions[i] * 0.1f);
+                arrowRight = arrowHeadBase + Quaternion.Euler(0, -45, 0) * (-directions[i] * 0.1f);
+            }
+
+            // Dibujar la punta de la flecha
+            lines[i].SetPosition(2, arrowLeft);
+            lines[i].SetPosition(3, endPos);
+            lines[i].SetPosition(4, arrowRight);
+
+            // Configurar los colliders en la posición correcta
             lineColliders[i].SetActive(true);
-            lineColliders[i].transform.position = transform.position + directions[i] * (lineLenght/2);
+            lineColliders[i].transform.position = transform.position + directions[i] * (lineLenght / 2);
             lineColliders[i].transform.rotation = Quaternion.LookRotation(directions[i]);
             lineColliders[i].GetComponent<BoxCollider>().size = new Vector3(0.1f, 0.1f, lineLenght);
         }
         linesVisible = true;
     }
+
 
     void HideLines()
     {
