@@ -3,18 +3,18 @@ using UnityEngine;
 public class CameraOrbit : MonoBehaviour
 {
     [SerializeField] private Transform target;
-    [SerializeField] private float distance = 2.0f;
+    private float distance;
+    [SerializeField] private float maxDistance = 5.0f;
+    [SerializeField] private float minDistance = 2.0f;
     [SerializeField] private float xSpeed = 1.0f;
     [SerializeField] private float ySpeed = 1.0f;
-
-    //public float yMinLimit = -10f;
-    //public float yMaxLimit = 80f; 
 
     private float x = 0.0f;
     private float y = 0.0f;
 
     void Start()
     {
+        distance = maxDistance;
         Vector3 angles = transform.eulerAngles;
         x = angles.y;
         y = angles.x;
@@ -27,6 +27,8 @@ public class CameraOrbit : MonoBehaviour
             x += Input.GetAxis("Mouse X") * xSpeed * distance * Time.deltaTime;
             y -= Input.GetAxis("Mouse Y") * ySpeed * Time.deltaTime;
 
+            distance -= Input.GetAxis("Mouse ScrollWheel") * 5;
+            distance = Mathf.Clamp(distance, minDistance, maxDistance); 
 
             Quaternion rotation = Quaternion.Euler(y, x, 0);
 
