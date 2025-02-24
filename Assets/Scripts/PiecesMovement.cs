@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class PiecesMovement : MonoBehaviour
 {
-    public GameObject piece; // La bola que se moverá
     public float moveSpeed = 5f; // Velocidad de movimiento de la bola
     [SerializeField] private float lineLenght = 0.5f;
     private LineRenderer[] lines; // Array para almacenar las 6 líneas
@@ -14,14 +13,6 @@ public class PiecesMovement : MonoBehaviour
 
     void Start()
     {
-        // Agregar Rigidbody si no tiene uno
-        if (piece.GetComponent<Rigidbody>() == null)
-        {
-            Rigidbody rb = piece.AddComponent<Rigidbody>();
-            rb.useGravity = false; // Desactivar la gravedad si no quieres que caiga
-            rb.constraints = RigidbodyConstraints.FreezeRotation; // Evitar que gire
-        }
-
         // Inicializar las direcciones de las líneas
         directions = new Vector3[]
         {
@@ -63,7 +54,7 @@ public class PiecesMovement : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit))
             {
-                if (hit.collider.gameObject == piece)
+                if (hit.collider.gameObject == this.gameObject)
                 {
                     ShowLines();
                 }
@@ -96,11 +87,11 @@ public class PiecesMovement : MonoBehaviour
         for (int i = 0; i < 6; i++)
         {
             lines[i].enabled = true;
-            lines[i].SetPosition(0, piece.transform.position);
-            lines[i].SetPosition(1, piece.transform.position + directions[i] * lineLenght);
+            lines[i].SetPosition(0, transform.position);
+            lines[i].SetPosition(1, transform.position + directions[i] * lineLenght);
 
             lineColliders[i].SetActive(true);
-            lineColliders[i].transform.position = piece.transform.position + directions[i] * (lineLenght/2);
+            lineColliders[i].transform.position = transform.position + directions[i] * (lineLenght/2);
             lineColliders[i].transform.rotation = Quaternion.LookRotation(directions[i]);
             lineColliders[i].GetComponent<BoxCollider>().size = new Vector3(0.1f, 0.1f, lineLenght);
         }
@@ -121,7 +112,7 @@ public class PiecesMovement : MonoBehaviour
         if (selectedDirection != -1)
         {
             Vector3 movement = directions[selectedDirection] * moveSpeed * Time.deltaTime;
-            piece.transform.position += movement;
+            transform.position += movement;
         }
     }
 
