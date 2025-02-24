@@ -22,13 +22,16 @@ public class CameraOrbit : MonoBehaviour
 
     void Update()
     {
-        if (target && Input.GetMouseButton(1))
+        if (target)
         {
-            x += Input.GetAxis("Mouse X") * xSpeed * distance * Time.deltaTime;
-            y -= Input.GetAxis("Mouse Y") * ySpeed * Time.deltaTime;
+            if (Input.GetMouseButton(1))
+            {
+                x += Input.GetAxis("Mouse X") * xSpeed * distance * Time.deltaTime;
+                y -= Input.GetAxis("Mouse Y") * ySpeed * Time.deltaTime;
+            }
 
             distance -= Input.GetAxis("Mouse ScrollWheel") * 5;
-            distance = Mathf.Clamp(distance, minDistance, maxDistance); 
+            distance = Mathf.Clamp(distance, minDistance, maxDistance);
 
             Quaternion rotation = Quaternion.Euler(y, x, 0);
 
@@ -39,5 +42,4 @@ public class CameraOrbit : MonoBehaviour
             transform.position = position;
         }
     }
-
 }
