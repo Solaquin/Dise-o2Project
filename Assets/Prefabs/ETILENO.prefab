@@ -64,6 +64,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ETILENO
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 88eea7c8692a0b148ad29c858bc4cb04, type: 3}
+      propertyPath: m_TagString
+      value: Monomer
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -145,4 +149,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   rotationAngle: 90
-  lineLength: 1.5
+  arrowsHandler: {fileID: 0}
