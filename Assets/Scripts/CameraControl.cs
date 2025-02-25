@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class CameraOrbit : MonoBehaviour
 {
-    [SerializeField] private Transform target;
+    [SerializeField] private Transform defaultTarget; // El cubo original
+    private Transform target;
     private float distance;
     [SerializeField] private float maxDistance = 5.0f;
     [SerializeField] private float minDistance = 2.0f;
@@ -14,6 +15,7 @@ public class CameraOrbit : MonoBehaviour
 
     void Start()
     {
+        target = defaultTarget; // Inicialmente, el objetivo es el cubo original
         distance = maxDistance;
         Vector3 angles = transform.eulerAngles;
         x = angles.y;
@@ -41,5 +43,15 @@ public class CameraOrbit : MonoBehaviour
             transform.rotation = rotation;
             transform.position = position;
         }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            target = defaultTarget; // Cambiar el objetivo al cubo original
+        }
+    }
+
+    public void SetTarget(Transform newTarget)
+    {
+        target = newTarget;
     }
 }
