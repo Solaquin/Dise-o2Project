@@ -3,13 +3,17 @@ using UnityEngine;
 public class PiecesMovement : MonoBehaviour
 {
     public float moveSpeed = 5f; // Velocidad de movimiento de la bola
-    [SerializeField] private float lineLenght = 0.5f;
+    public float rotationAngle = 90f; // Ángulo de rotación de la bola  
+    [SerializeField] private float lineLength = 0.5f;
+
     private LineRenderer[] lines; // Array para almacenar las 6 líneas
     private GameObject[] lineColliders; // Array para almacenar los colliders de las líneas
     private Vector3[] directions; // Direcciones de las líneas
     private bool linesVisible = false; // Indica si las líneas están visibles
     private int selectedDirection = -1; // Dirección seleccionada (-1 = ninguna)
     private bool isMoving = false; // Indica si la bola está en movimiento
+        private bool isRotating = false;
+    private bool translationMode = true; // true = traslación, false = rotación
 
     void Start()
     {
@@ -47,6 +51,17 @@ public class PiecesMovement : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            translationMode = true;
+            Debug.Log("Modo: Traslación");
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            translationMode = false;
+            Debug.Log("Modo: Rotación");
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -65,7 +80,14 @@ public class PiecesMovement : MonoBehaviour
                         if (hit.collider.gameObject == lineColliders[i])
                         {
                             selectedDirection = i;
-                            isMoving = true;
+                            if (translationMode)
+                            {
+                                isMoving = true;
+                            }
+                            else
+                            {
+                                isRotating = true;
+                            }
                             linesVisible = false;
                             HideLines();
                             break;
@@ -77,54 +99,61 @@ public class PiecesMovement : MonoBehaviour
 
         if (isMoving)
         {
-            HideLines();
-            MoveBall();
+            MovePiece();
+        }
+
+        if (isRotating)
+        {
+            RotatePiece();
         }
     }
 
     void ShowLines()
     {
-        for (int i = 0; i < 6; i++)
+        HideLines();
+
+        if (translationMode)
         {
-            Vector3 startPos = transform.position;
-            Vector3 endPos = transform.position + directions[i] * lineLenght;
-
-            lines[i].enabled = true;
-            lines[i].positionCount = 5; // 1 línea + 2 líneas de la punta
-            lines[i].SetPosition(0, startPos);
-            lines[i].SetPosition(1, endPos);
-
-            // Crear la base de la flecha
-            Vector3 arrowHeadBase = endPos - directions[i] * (lineLenght * 0.2f); // Base de la punta
-
-            Vector3 arrowLeft, arrowRight;
-
-            // Determinar la rotación de la punta de flecha según la dirección
-            if (directions[i] == Vector3.up || directions[i] == Vector3.down)
-            {
-                // Para flechas en el eje Y, rotamos en el plano XZ
-                arrowLeft = arrowHeadBase + Quaternion.Euler(45, 0, 0) * (-directions[i] * 0.1f);
-                arrowRight = arrowHeadBase + Quaternion.Euler(-45, 0, 0) * (-directions[i] * 0.1f);
-            }
-            else
-            {
-                // Para las demás direcciones, rotamos en el plano XY
-                arrowLeft = arrowHeadBase + Quaternion.Euler(0, 45, 0) * (-directions[i] * 0.1f);
-                arrowRight = arrowHeadBase + Quaternion.Euler(0, -45, 0) * (-directions[i] * 0.1f);
-            }
-
-            // Dibujar la punta de la flecha
-            lines[i].SetPosition(2, arrowLeft);
-            lines[i].SetPosition(3, endPos);
-            lines[i].SetPosition(4, arrowRight);
-
-            // Configurar los colliders en la posición correcta
-            lineColliders[i].SetActive(true);
-            lineColliders[i].transform.position = transform.position + directions[i] * (lineLenght / 2);
-            lineColliders[i].transform.rotation = Quaternion.LookRotation(directions[i]);
-            lineColliders[i].GetComponent<BoxCollider>().size = new Vector3(0.1f, 0.1f, lineLenght);
+            // Mostrar todas las flechas de traslación (VERDES)
+            for (int i = 0; i < 6; i++)
+                DrawArrow(lines[i], directions[i], Color.green);
         }
+        else
+        {
+            // Mostrar solo las flechas de rotación (ROJAS)
+            DrawArrow(lines[0], Vector3.up, Color.red); // Rotación en Y
+            DrawArrow(lines[2], Vector3.left, Color.red); // Rotación en X
+        }
+
         linesVisible = true;
+    }
+
+    void DrawArrow(LineRenderer line, Vector3 direction, Color color)
+    {
+        Vector3 startPos = transform.position;
+        Vector3 endPos = transform.position + direction * lineLength;
+
+        line.enabled = true;
+        line.positionCount = 5;
+        line.startColor = color;
+        line.endColor = color;
+
+        line.SetPosition(0, startPos);
+        line.SetPosition(1, endPos);
+
+        Vector3 arrowHeadBase = endPos - direction * (lineLength * 0.2f);
+        Vector3 arrowLeft = arrowHeadBase + Quaternion.Euler(0, 45, 0) * (-direction * 0.1f);
+        Vector3 arrowRight = arrowHeadBase + Quaternion.Euler(0, -45, 0) * (-direction * 0.1f);
+
+        line.SetPosition(2, arrowLeft);
+        line.SetPosition(3, endPos);
+        line.SetPosition(4, arrowRight);
+
+        GameObject lineCollider = lineColliders[System.Array.IndexOf(directions, direction)];
+        lineCollider.SetActive(true);
+        lineCollider.transform.position = transform.position + direction * (lineLength / 2);
+        lineCollider.transform.rotation = Quaternion.LookRotation(direction);
+        lineCollider.GetComponent<BoxCollider>().size = new Vector3(0.1f, 0.1f, lineLength);
     }
 
 
@@ -137,7 +166,7 @@ public class PiecesMovement : MonoBehaviour
         }
     }
 
-    void MoveBall()
+    void MovePiece()
     {
         if (selectedDirection != -1)
         {
@@ -146,9 +175,34 @@ public class PiecesMovement : MonoBehaviour
         }
     }
 
+    void RotatePiece()
+    {
+        if (selectedDirection != -1)
+        {
+            Vector3 rotationAxis = directions[selectedDirection];
+
+            // Rotamos alrededor del eje seleccionado
+            if (rotationAxis == Vector3.up || rotationAxis == Vector3.down)
+            {
+                transform.Rotate(Vector3.up, rotationAngle, Space.World);
+            }
+            else if (rotationAxis == Vector3.left || rotationAxis == Vector3.right)
+            {
+                transform.Rotate(Vector3.right, rotationAngle, Space.World);
+            }
+            else if (rotationAxis == Vector3.forward || rotationAxis == Vector3.back)
+            {
+                transform.Rotate(Vector3.forward, rotationAngle, Space.World);
+            }
+
+            isRotating = false; // Detenemos la rotación después de un solo paso
+        }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
-        isMoving = false; // Detener el movimiento al chocar con otro objeto
-        selectedDirection = -1; // Reiniciar la dirección
+        isMoving = false;
+        isRotating = false;
+        selectedDirection = -1;
     }
 }
