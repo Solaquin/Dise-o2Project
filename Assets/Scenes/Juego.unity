@@ -378,10 +378,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1369030445}
-  maxDistance: 5
+  maxDistance: 10
   minDistance: 2
-  xSpeed: 400
-  ySpeed: 400
+  xSpeed: 200
+  ySpeed: 600
 --- !u!1 &566579450
 GameObject:
   m_ObjectHideFlags: 0
