@@ -3,50 +3,50 @@ using UnityEngine;
 public class PiecesMovement : MonoBehaviour
 {
     public float moveSpeed = 5f; // Velocidad de movimiento de la bola
-    public float rotationAngle = 90f; // ¡ngulo de inclinaciÛn de la bola  
+    public float rotationAngle = 90f; // √Ångulo de inclinaci√≥n de la bola  
     [SerializeField] private float lineLength = 0.5f;
 
-    private LineRenderer[] lines; // Array para almacenar las 6 lÌneas
-    private GameObject[] lineColliders; // Array para almacenar los colliders de las lÌneas
-    private Vector3[] directions; // Direcciones de las lÌneas
-    private bool linesVisible = false; // Indica si las lÌneas est·n visibles
-    private int selectedDirection = -1; // DirecciÛn seleccionada (-1 = ninguna)
-    private bool isMoving = false; // Indica si la bola est· en movimiento
+    private LineRenderer[] lines; // Array para almacenar las 6 l√≠neas
+    private GameObject[] lineColliders; // Array para almacenar los colliders de las l√≠neas
+    private Vector3[] directions; // Direcciones de las l√≠neas
+    private bool linesVisible = false; // Indica si las l√≠neas est√°n visibles
+    private int selectedDirection = -1; // Direcci√≥n seleccionada (-1 = ninguna)
+    private bool isMoving = false; // Indica si la bola est√° en movimiento
     private bool isRotating = false;
-    private bool translationMode = true; // true = traslaciÛn, false = rotaciÛn
+    private bool translationMode = true; // true = traslaci√≥n, false = rotaci√≥n
 
     private CameraOrbit cameraOrbit;
 
     void Start()
     {
-        // Inicializar las direcciones de las lÌneas
+        // Inicializar las direcciones de las l√≠neas
         directions = new Vector3[]
         {
             Vector3.up, Vector3.down, Vector3.left, Vector3.right, Vector3.forward, Vector3.back
         };
 
-        // Inicializar el array de lÌneas y colliders
+        // Inicializar el array de l√≠neas y colliders
         lines = new LineRenderer[6];
         lineColliders = new GameObject[6];
 
-        // Crear las lÌneas y los colliders
+        // Crear las l√≠neas y los colliders
         for (int i = 0; i < 6; i++)
         {
             GameObject lineObject = new GameObject("Line_" + i);
             lines[i] = lineObject.AddComponent<LineRenderer>();
-            lines[i].positionCount = 5; // 5 puntos para la lÌnea con punta de flecha
+            lines[i].positionCount = 5; // 5 puntos para la l√≠nea con punta de flecha
             lines[i].startWidth = 0.05f;
             lines[i].endWidth = 0.05f;
-            lines[i].material = new Material(Shader.Find("Sprites/Default")); // Material b·sico
+            lines[i].material = new Material(Shader.Find("Sprites/Default")); // Material b√°sico
             lines[i].startColor = Color.green;
             lines[i].endColor = Color.green;
             lines[i].enabled = false; // Ocultar al inicio
 
-            // Crear el collider para la lÌnea
+            // Crear el collider para la l√≠nea
             lineColliders[i] = new GameObject("LineCollider_" + i);
             lineColliders[i].transform.SetParent(lineObject.transform);
             BoxCollider collider = lineColliders[i].AddComponent<BoxCollider>();
-            collider.isTrigger = true; // No debe afectar la fÌsica
+            collider.isTrigger = true; // No debe afectar la f√≠sica
             lineColliders[i].SetActive(false);
         }
 
@@ -59,12 +59,12 @@ public class PiecesMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.T))
         {
             translationMode = true;
-            Debug.Log("Modo: TraslaciÛn");
+            Debug.Log("Modo: Traslaci√≥n");
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
             translationMode = false;
-            Debug.Log("Modo: RotaciÛn");
+            Debug.Log("Modo: Rotaci√≥n");
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -77,7 +77,7 @@ public class PiecesMovement : MonoBehaviour
                 if (hit.collider.gameObject == this.gameObject)
                 {
                     ShowLines();
-                    cameraOrbit.SetTarget(this.transform); // Cambiar el objetivo de la c·mara a esta pieza
+                    cameraOrbit.SetTarget(this.transform); // Cambiar el objetivo de la c√°mara a esta pieza
                 }
                 else
                 {
@@ -120,16 +120,16 @@ public class PiecesMovement : MonoBehaviour
 
         if (translationMode)
         {
-            // Mostrar todas las flechas de traslaciÛn (VERDES)
+            // Mostrar todas las flechas de traslaci√≥n (VERDES)
             for (int i = 0; i < 6; i++)
                 DrawArrow(lines[i], directions[i], Color.green);
         }
         else
         {
-            // Mostrar solo las flechas de rotaciÛn (ROJAS)
-            DrawArrow(lines[0], Vector3.up, Color.red); // RotaciÛn en Y (arriba/abajo)
-            DrawArrow(lines[2], Vector3.left, Color.red); // RotaciÛn en X (izquierda/derecha)
-            DrawArrow(lines[4], Vector3.forward, Color.red); // RotaciÛn en Z (adelante/atr·s)
+            // Mostrar solo las flechas de rotaci√≥n (ROJAS)
+            DrawArrow(lines[0], Vector3.up, Color.red); // Rotaci√≥n en Y
+            DrawArrow(lines[2], Vector3.left, Color.red); // Rotaci√≥n en X
+            DrawArrow(lines[5], Vector3.forward, Color.red); // Rotaci√≥n en X
         }
 
         linesVisible = true;
@@ -187,11 +187,12 @@ public class PiecesMovement : MonoBehaviour
         {
             Vector3 direction = directions[selectedDirection];
 
-            // Inclinamos la bola hacia la direcciÛn seleccionada
+            // Inclinamos la bola hacia la direcci√≥n seleccionada
             Quaternion targetRotation = Quaternion.FromToRotation(Vector3.up, direction) * transform.rotation;
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationAngle);
 
-            isRotating = false; // Detenemos la rotaciÛn despuÈs de un solo paso
+
+            isRotating = false; // Detenemos la rotaci√≥n despu√©s de un solo paso
         }
     }
 
