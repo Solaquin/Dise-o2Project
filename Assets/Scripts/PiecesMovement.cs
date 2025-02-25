@@ -123,6 +123,7 @@ public class PiecesMovement : MonoBehaviour
             // Mostrar solo las flechas de rotación (ROJAS)
             DrawArrow(lines[0], Vector3.up, Color.red); // Rotación en Y
             DrawArrow(lines[2], Vector3.left, Color.red); // Rotación en X
+            DrawArrow(lines[5], Vector3.forward, Color.red); // Rotación en X
         }
 
         linesVisible = true;
@@ -186,11 +187,11 @@ public class PiecesMovement : MonoBehaviour
             {
                 transform.Rotate(Vector3.up, rotationAngle, Space.World);
             }
-            else if (rotationAxis == Vector3.left || rotationAxis == Vector3.right)
+            else if (rotationAxis == Vector3.forward || rotationAxis == Vector3.back)
             {
                 transform.Rotate(Vector3.right, rotationAngle, Space.World);
             }
-            else if (rotationAxis == Vector3.forward || rotationAxis == Vector3.back)
+            else if (rotationAxis == Vector3.left || rotationAxis == Vector3.right)
             {
                 transform.Rotate(Vector3.forward, rotationAngle, Space.World);
             }
