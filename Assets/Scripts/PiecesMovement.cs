@@ -3,7 +3,7 @@ using UnityEngine;
 public class PiecesMovement : MonoBehaviour
 {
     public float moveSpeed = 5f; // Velocidad de movimiento de la bola
-    public float rotationAngle = 90f; // Ángulo de rotación de la bola  
+    public float rotationAngle = 90f; // Ángulo de inclinación de la bola  
     [SerializeField] private float lineLength = 0.5f;
 
     private LineRenderer[] lines; // Array para almacenar las 6 líneas
@@ -12,8 +12,10 @@ public class PiecesMovement : MonoBehaviour
     private bool linesVisible = false; // Indica si las líneas están visibles
     private int selectedDirection = -1; // Dirección seleccionada (-1 = ninguna)
     private bool isMoving = false; // Indica si la bola está en movimiento
-        private bool isRotating = false;
+    private bool isRotating = false;
     private bool translationMode = true; // true = traslación, false = rotación
+
+    private CameraOrbit cameraOrbit;
 
     void Start()
     {
@@ -32,7 +34,7 @@ public class PiecesMovement : MonoBehaviour
         {
             GameObject lineObject = new GameObject("Line_" + i);
             lines[i] = lineObject.AddComponent<LineRenderer>();
-            lines[i].positionCount = 2;
+            lines[i].positionCount = 5; // 5 puntos para la línea con punta de flecha
             lines[i].startWidth = 0.05f;
             lines[i].endWidth = 0.05f;
             lines[i].material = new Material(Shader.Find("Sprites/Default")); // Material básico
@@ -47,6 +49,9 @@ public class PiecesMovement : MonoBehaviour
             collider.isTrigger = true; // No debe afectar la física
             lineColliders[i].SetActive(false);
         }
+
+        // Obtener la referencia al script CameraOrbit
+        cameraOrbit = Camera.main.GetComponent<CameraOrbit>();
     }
 
     void Update()
@@ -72,6 +77,7 @@ public class PiecesMovement : MonoBehaviour
                 if (hit.collider.gameObject == this.gameObject)
                 {
                     ShowLines();
+                    cameraOrbit.SetTarget(this.transform); // Cambiar el objetivo de la cámara a esta pieza
                 }
                 else
                 {
@@ -121,8 +127,9 @@ public class PiecesMovement : MonoBehaviour
         else
         {
             // Mostrar solo las flechas de rotación (ROJAS)
-            DrawArrow(lines[0], Vector3.up, Color.red); // Rotación en Y
-            DrawArrow(lines[2], Vector3.left, Color.red); // Rotación en X
+            DrawArrow(lines[0], Vector3.up, Color.red); // Rotación en Y (arriba/abajo)
+            DrawArrow(lines[2], Vector3.left, Color.red); // Rotación en X (izquierda/derecha)
+            DrawArrow(lines[4], Vector3.forward, Color.red); // Rotación en Z (adelante/atrás)
         }
 
         linesVisible = true;
@@ -156,7 +163,6 @@ public class PiecesMovement : MonoBehaviour
         lineCollider.GetComponent<BoxCollider>().size = new Vector3(0.1f, 0.1f, lineLength);
     }
 
-
     void HideLines()
     {
         for (int i = 0; i < 6; i++)
@@ -179,21 +185,11 @@ public class PiecesMovement : MonoBehaviour
     {
         if (selectedDirection != -1)
         {
-            Vector3 rotationAxis = directions[selectedDirection];
+            Vector3 direction = directions[selectedDirection];
 
-            // Rotamos alrededor del eje seleccionado
-            if (rotationAxis == Vector3.up || rotationAxis == Vector3.down)
-            {
-                transform.Rotate(Vector3.up, rotationAngle, Space.World);
-            }
-            else if (rotationAxis == Vector3.left || rotationAxis == Vector3.right)
-            {
-                transform.Rotate(Vector3.right, rotationAngle, Space.World);
-            }
-            else if (rotationAxis == Vector3.forward || rotationAxis == Vector3.back)
-            {
-                transform.Rotate(Vector3.forward, rotationAngle, Space.World);
-            }
+            // Inclinamos la bola hacia la dirección seleccionada
+            Quaternion targetRotation = Quaternion.FromToRotation(Vector3.up, direction) * transform.rotation;
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationAngle);
 
             isRotating = false; // Detenemos la rotación después de un solo paso
         }
