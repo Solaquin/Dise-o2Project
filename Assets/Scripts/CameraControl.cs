@@ -9,6 +9,7 @@ public class CameraOrbit : MonoBehaviour
     [SerializeField] private float minDistance = 2.0f;
     [SerializeField] private float xSpeed = 1.0f;
     [SerializeField] private float ySpeed = 1.0f;
+    [SerializeField] private float zoomSpeed = 1.0f;
 
     private float x = 0.0f;
     private float y = 0.0f;
@@ -32,7 +33,7 @@ public class CameraOrbit : MonoBehaviour
                 y -= Input.GetAxis("Mouse Y") * ySpeed * Time.deltaTime;
             }
 
-            distance -= Input.GetAxis("Mouse ScrollWheel") * 5;
+            distance -= Input.GetAxis("Mouse ScrollWheel") * zoomSpeed;
             distance = Mathf.Clamp(distance, minDistance, maxDistance);
 
             Quaternion rotation = Quaternion.Euler(y, x, 0);
