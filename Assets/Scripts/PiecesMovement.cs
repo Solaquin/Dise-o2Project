@@ -9,6 +9,7 @@ public class PiecesMovement : MonoBehaviour
     [SerializeField] private ArrowsHandler arrowsHandler; // Referencia al script ArrowsHandler
     private int selectedDirection = -1; // Dirección seleccionada (-1 = ninguna)
     private bool isSelected = false; // Nueva variable para saber si esta pieza está seleccionada
+    private Rigidbody rb;
 
 
     private CameraOrbit cameraOrbit;
@@ -22,6 +23,7 @@ public class PiecesMovement : MonoBehaviour
     {
         // Obtener la referencia al script CameraOrbit
         cameraOrbit = Camera.main.GetComponent<CameraOrbit>();
+        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -119,6 +121,8 @@ public class PiecesMovement : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
         isMoving = false;
         selectedDirection = -1;
         isSelected = false; // Desseleccionamos la pieza tras chocar

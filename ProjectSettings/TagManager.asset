@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Monomer
+  - Connector
   layers:
   - Default
   - TransparentFX
