@@ -123,6 +123,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9ae4e5e1a341d044aef48c7ba52deac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  connectorID: 0
+  isStartConnector: 0
+  isStopConnector: 0
 --- !u!1001 &3863416346988657698
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -221,8 +224,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1002.073, y: 999.14417, z: 1004.61633}
-  m_Center: {x: 16.82849, y: 15.963364, z: -17.846584}
+  m_Size: {x: 995, y: 995, z: 995}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &6395199399006677338
 Rigidbody:
   m_ObjectHideFlags: 0
