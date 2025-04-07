@@ -30,13 +30,13 @@ public class ArrowsHandler : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.T))
         {
             translationMode = true;
-            Debug.Log("Modo: Traslación");
+            Debug.Log($"Modo: Traslación - translationMode: {translationMode} - activePiece{activePiece}");
             UpdateArrows();
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
             translationMode = false;
-            Debug.Log("Modo: Rotación");
+            Debug.Log($"Modo: Rotación - translationMode: {translationMode} - activePiece{activePiece}");
             UpdateArrows();
         }
     }
@@ -115,12 +115,12 @@ public class ArrowsHandler : MonoBehaviour
             if (translationMode)
             {
                 activePiece.MoveInDirection(direction);
+                HideArrows();
             }
             else
             {
                 activePiece.RotateInDirection(direction);
             }
-            HideArrows();
         }
     }
 
