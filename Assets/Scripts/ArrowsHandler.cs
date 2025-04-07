@@ -86,11 +86,8 @@ public class ArrowsHandler : MonoBehaviour
             for (int i = 0; i < 6; i++)
             {
                 arrowInstances[i].GetComponent<MeshRenderer>().material = arrowsMaterial[1];
+                arrowInstances[i].SetActive(true);
             }
-            // Rotación en Y, X, Z: usar solo algunos ejes
-            arrowInstances[0].SetActive(true); // up
-            arrowInstances[2].SetActive(true); // left
-            arrowInstances[5].SetActive(true); // forward
         }
     }
 
