@@ -3,32 +3,37 @@ using UnityEngine;
 
 public class PointsHandler : MonoBehaviour
 {
-    [SerializeField] private int points = 0; // Points variable to keep track the conections
+    [SerializeField] private int points = 0;
     [SerializeField] private Canvas succesCanva;
     private ConnectorHandler connectorHandler;
-    [SerializeField] AudioClip levelPassed;
+    [SerializeField] private AudioClip levelPassed;
+    [SerializeField] private bool soundIsPlaying = false;
 
+    private bool alreadyTriggered = false;
 
     void Start()
     {
         connectorHandler = GetComponent<ConnectorHandler>();
-        succesCanva.gameObject.SetActive(false); // Hide the canvas at the start
+        succesCanva.gameObject.SetActive(false);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (connectorHandler.ConnectorsCount >= 3)
+        if (connectorHandler.ConnectorsCount >= 3 && !alreadyTriggered)
         {
-            StartCoroutine(EsperarYReproducirSonido(3f)); // Wait 0.5 seconds before playing the sound
+            alreadyTriggered = true;
+            StartCoroutine(EsperarYReproducirSonido(3f));
         }
     }
 
     IEnumerator EsperarYReproducirSonido(float secs)
     {
         yield return new WaitForSeconds(secs);
-        SoundsController.Instance.EjecutarSonido(levelPassed);
+        if (!soundIsPlaying)
+        {
+            SoundsController.Instance.EjecutarSonido(levelPassed);
+            soundIsPlaying = true;
+        }
         succesCanva.gameObject.SetActive(true);
     }
-
 }

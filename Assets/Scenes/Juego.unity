@@ -747,7 +747,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 273969050}
         m_TargetAssemblyTypeName: Menu_Pausa, Assembly-CSharp
         m_MethodName: Reiniciar
         m_Mode: 1
@@ -2580,7 +2580,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 273969050}
         m_TargetAssemblyTypeName: Menu_Pausa, Assembly-CSharp
         m_MethodName: Salir
         m_Mode: 1
@@ -3207,7 +3207,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 273969050}
         m_TargetAssemblyTypeName: Menu_Pausa, Assembly-CSharp
         m_MethodName: Continuar
         m_Mode: 1
