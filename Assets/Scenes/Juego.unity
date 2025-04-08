@@ -2935,7 +2935,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4539988205950442593, guid: 26388520b2621584dbb913838f25e6e4, type: 3}
       propertyPath: connectorID
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4539988205950442593, guid: 26388520b2621584dbb913838f25e6e4, type: 3}
       propertyPath: connectorType
@@ -4274,7 +4274,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 617315568541009645, guid: 2c22621fe57a06041ab841108ba0c544, type: 3}
       propertyPath: connectorID
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 617315568541009645, guid: 2c22621fe57a06041ab841108ba0c544, type: 3}
       propertyPath: connectorType
@@ -4290,7 +4290,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2521139434389981704, guid: 2c22621fe57a06041ab841108ba0c544, type: 3}
       propertyPath: connectorID
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2521139434389981704, guid: 2c22621fe57a06041ab841108ba0c544, type: 3}
       propertyPath: connectorType

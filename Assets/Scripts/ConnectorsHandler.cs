@@ -2,14 +2,17 @@
 
 public class ConnectorHandler : MonoBehaviour
 {
+    private int connectorCount = 0;
+
     public void RegisterConnectionAttempt(Connectors a, Connectors b)
     {
         if (a == null || b == null) return;
 
         bool isValid = IsConnectionValid(a, b);
+        connectorCount = isValid ? connectorCount + 1 : connectorCount;
 
         string msg = isValid ? "✅ Conexión válida" : "❌ Conexión inválida";
-        Debug.Log($"{msg} entre {a.connectorType}({a.connectorID}) y {b.connectorType}({b.connectorID})");
+        Debug.Log($"{msg} entre {a.connectorType}({a.connectorID}) y {b.connectorType}({b.connectorID}) - Conexiones correctas: {connectorCount / 2}");
     }
 
     private bool IsConnectionValid(Connectors a, Connectors b)
@@ -28,10 +31,19 @@ public class ConnectorHandler : MonoBehaviour
         // INTERMEDIATE
         if (a.connectorType == ConnectorType.Intermediate)
         {
+            if (b.connectorType == ConnectorType.Intermediate)
+                return idA == idB; // Mismo ID entre intermedios
+
             // Puede conectarse con el siguiente ID
             return Mathf.Abs(idA - idB) == 1;
         }
 
         return false;
+    }
+
+    public int ConnectorsCount
+    {
+        get { return connectorCount; }
+        set { connectorCount = value; }
     }
 }
