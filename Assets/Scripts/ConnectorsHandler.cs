@@ -3,6 +3,7 @@
 public class ConnectorHandler : MonoBehaviour
 {
     private int connectorCount = 0;
+    [SerializeField] private AudioClip succesConnectionAudio;
 
     public void RegisterConnectionAttempt(Connectors a, Connectors b)
     {
@@ -13,6 +14,7 @@ public class ConnectorHandler : MonoBehaviour
 
         string msg = isValid ? "✅ Conexión válida" : "❌ Conexión inválida";
         Debug.Log($"{msg} entre {a.connectorType}({a.connectorID}) y {b.connectorType}({b.connectorID}) - Conexiones correctas: {connectorCount / 2}");
+        SoundsController.Instance.EjecutarSonido(succesConnectionAudio);
     }
 
     private bool IsConnectionValid(Connectors a, Connectors b)
