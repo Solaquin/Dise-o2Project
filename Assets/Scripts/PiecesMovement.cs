@@ -6,7 +6,6 @@ public class PiecesMovement : MonoBehaviour
     public float moveSpeed = 5f; // Velocidad de movimiento de la bola
     public float rotationAngle = 90f; // Ángulo de inclinación de la bola  
     private bool isMoving = false; // Indica si la bola está en movimiento
-    private bool isRotating = false; // Indica si la bola está rotando
     [SerializeField] private ArrowsHandler arrowsHandler; // Referencia al script ArrowsHandler
     private bool isSelected = false; // Nueva variable para saber si esta pieza está seleccionada
 

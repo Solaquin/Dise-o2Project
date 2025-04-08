@@ -1,16 +1,78 @@
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+
+public class Menu_Pausa : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    private bool pausado = false;
+    [SerializeField] private GameObject canva;
+    [SerializeField] private ScreenChange sceneManager;
+
     void Start()
     {
-        
+        canva.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
+
+    public void Update()
     {
-        
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+
+            AlternarPausa();
+
+        }
+
+    }
+
+    public void AlternarPausa()
+    {
+
+        pausado = !pausado;
+
+        if (pausado)
+        {
+            canva.SetActive(true);
+            Time.timeScale = 0f;
+
+        }
+        else
+        {
+            canva.SetActive(false);
+            Time.timeScale = 1f;
+        }
+    }
+
+    public void Pausar()
+    {
+        Debug.Log("Pausar");
+    }
+
+    public void Continuar()
+    {
+        Debug.Log("Continuar");
+        canva.SetActive(false);
+        Time.timeScale = 1f;
+    }
+
+
+    public void Reiniciar()
+    {
+        Debug.Log("Reiniciar");
+        sceneManager.ChangeScene("Juego");
+        Time.timeScale = 1f;
+    }
+
+
+    public void Salir()
+    {
+        canva.SetActive(false);
+        Time.timeScale = 1f;
+        sceneManager.ChangeScene("Menu Principal");
     }
 }
