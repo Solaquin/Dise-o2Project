@@ -54,7 +54,7 @@ public class ConnectorHandler : MonoBehaviour
 
     public int ConnectorsCount
     {
-        get { return connectorCount; }
+        get { return connectorCount/2; }
         set { connectorCount = value; }
     }
 }
