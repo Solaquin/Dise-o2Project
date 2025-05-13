@@ -15,11 +15,14 @@ EditorBuildSettings:
     path: Assets/Scenes/Ajustes.unity
     guid: 3597f7a1d7131be4bbac13dc944e83da
   - enabled: 1
+    path: Assets/Scenes/Como Jugar.unity
+    guid: 0257b8b3b01325040bfbd03e46c3dc6c
+  - enabled: 1
     path: Assets/Scenes/Basico1.unity
     guid: e477adb40fcb20f4ba01ea15a00aca64
   - enabled: 1
     path: Assets/Scenes/Basico2.unity
-    guid: 272a06ca74937954f88cb158785906b4
+    guid: 758fc9acae16b3944b7185174f780b6b
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
