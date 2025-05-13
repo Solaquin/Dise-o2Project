@@ -12,8 +12,11 @@ public class Menu_Pausa : MonoBehaviour
     [SerializeField] private GameObject canva;
     [SerializeField] private ScreenChange sceneManager;
 
+    private Crono crono;
+
     void Start()
     {
+        crono = GetComponent<Crono>();
         canva.SetActive(false);
     }
 
@@ -21,7 +24,7 @@ public class Menu_Pausa : MonoBehaviour
     public void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && crono.FailedLevel == false)
         {
 
             AlternarPausa();
@@ -64,7 +67,7 @@ public class Menu_Pausa : MonoBehaviour
     public void Reiniciar()
     {
         Debug.Log("Reiniciar");
-        sceneManager.ChangeScene("Juego");
+        sceneManager.ChangeScene(SceneManager.GetActiveScene().name);
         Time.timeScale = 1f;
     }
 
