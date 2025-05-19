@@ -1,7 +1,5 @@
 using UnityEngine;
-using System.Collections;
-using UnityEngine.SceneManagement; // Importa el espacio de nombres para la gestión de escenas
-
+using UnityEngine.SceneManagement;
 public class ScreenChange : MonoBehaviour
 {
     public string[] sceneNames;
