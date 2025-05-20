@@ -874,7 +874,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6181648079578779775, guid: ac978eddc055a4b4fbbad1417708c60e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -15.12
+      value: -14.97
       objectReference: {fileID: 0}
     - target: {fileID: 6181648079578779775, guid: ac978eddc055a4b4fbbad1417708c60e, type: 3}
       propertyPath: m_LocalPosition.y
@@ -918,6 +918,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6843866158085659942, guid: ac978eddc055a4b4fbbad1417708c60e, type: 3}
       propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6843866158085659942, guid: ac978eddc055a4b4fbbad1417708c60e, type: 3}
+      propertyPath: m_CollisionDetection
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7257669526949176815, guid: ac978eddc055a4b4fbbad1417708c60e, type: 3}
@@ -2394,6 +2398,10 @@ PrefabInstance:
     - target: {fileID: 5781831155472068726, guid: f6502381edf45524e8b7c7e035c1d9cf, type: 3}
       propertyPath: m_Name
       value: FLUOR_MID
+      objectReference: {fileID: 0}
+    - target: {fileID: 6522699314167607541, guid: f6502381edf45524e8b7c7e035c1d9cf, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6590701816072284876, guid: f6502381edf45524e8b7c7e035c1d9cf, type: 3}
       propertyPath: m_LocalPosition.x

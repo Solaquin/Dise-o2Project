@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using static UnityEngine.GridBrushBase;
 
@@ -72,22 +73,32 @@ public class PiecesMovement : MonoBehaviour
 
     void MovePiece()
     {
-        transform.position += movementDirection * moveSpeed * Time.deltaTime;
+        rb.MovePosition(rb.position + movementDirection * moveSpeed * Time.deltaTime);
     }
 
     public void RotateInDirection(Vector3 direction)
     {
-        
-        // Calculamos la rotación objetivo combinando la rotación actual y la deseada
-        Quaternion targetRotation = Quaternion.FromToRotation(Vector3.up, direction) * transform.rotation;
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationAngle);
+        // Calcular rotación deseada
+        Quaternion rotationDelta = Quaternion.FromToRotation(Vector3.up, direction);
+
+        // Aplicar rotación al objeto instantáneamente
+        rb.MoveRotation(rotationDelta * rb.rotation);
 
         // En caso de necesitar ajustar la rotación extra en Y para flechas verticales
         if (direction == Vector3.up || direction == Vector3.down)
         {
-            transform.Rotate(Vector3.up, rotationAngle, Space.World);
+            rb.MoveRotation(Quaternion.Euler(0, rotationAngle, 0) * rb.rotation);
         }
-            
+        // Aplicar la rotación al Rigidbody
+
+        Physics.SyncTransforms();
+
+        StartCoroutine(DelayedConnectorCheck()); // Llama a la verificación de conectores después de un frame
+    }
+    private IEnumerator DelayedConnectorCheck()
+    {
+        yield return new WaitForFixedUpdate(); // Espera un frame para asegurar que la rotación se aplique
+        VerificarConectores();
     }
 
     public void DeselectPiece()
@@ -109,7 +120,7 @@ public class PiecesMovement : MonoBehaviour
             Mathf.Round(transform.position.z)
         );
 
-        VerificarConectores(); 
+        VerificarConectores();
     }
 
     private void VerificarConectores()
