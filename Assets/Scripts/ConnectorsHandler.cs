@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ConnectorHandler : MonoBehaviour
@@ -6,9 +8,13 @@ public class ConnectorHandler : MonoBehaviour
     [SerializeField] private AudioClip succesConnectionAudio;
     [SerializeField] private AudioClip failConnectionAudio;
     [SerializeField] private PointsHandler pointsHandler;
+    [SerializeField] private TextMeshProUGUI enlaceCorrectoText;
 
-    private List<(Connectors, Connectors)> activeConnections = new();
 
+    private void Start()
+    {
+        enlaceCorrectoText.gameObject.SetActive(false);
+    }
     public void RegisterConnectionAttempt(Connectors a, Connectors b)
     {
         if (a == null || b == null) return;
@@ -21,7 +27,7 @@ public class ConnectorHandler : MonoBehaviour
             a.isConnected = true;
             b.isConnected = true;
 
-            activeConnections.Add((a, b));
+            StartCoroutine(MostrarMensaje(2f));
             pointsHandler.CheckLevelCompletion();
         }
         else
@@ -64,4 +70,34 @@ public class ConnectorHandler : MonoBehaviour
 
         return false;
     }
+
+    IEnumerator MostrarMensaje(float secs)
+    {
+        enlaceCorrectoText.gameObject.SetActive(true);
+
+        // Esperar antes de empezar el fade
+        yield return new WaitForSeconds(secs);
+
+        // Guardar el color original
+        Color originalColor = enlaceCorrectoText.color;
+
+        float duration = 1f; // Tiempo del fade
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float alpha = Mathf.Lerp(1f, 0f, elapsed / duration);
+            enlaceCorrectoText.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
+            yield return null;
+        }
+
+        // Asegura que esté completamente transparente
+        enlaceCorrectoText.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0f);
+        enlaceCorrectoText.gameObject.SetActive(false);
+
+        //Restaurar el color original
+        enlaceCorrectoText.color = originalColor;
+    }
+
 }

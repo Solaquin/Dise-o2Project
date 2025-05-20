@@ -1,11 +1,22 @@
 using System.Collections;
+using TMPro;
+using TMPro.Examples;
 using UnityEngine;
 
 public class PointsHandler : MonoBehaviour
 {
     [SerializeField] private int points = 0;
+    private float timeToReach = 0f;
     [SerializeField] private Canvas succesCanva;
+    [SerializeField] private TextMeshProUGUI timeText;
+    [SerializeField] private TextMeshProUGUI pointsText;
+    [SerializeField] private CameraOrbit cameraOrbit;
+
+
+
     private ConnectorHandler connectorHandler;
+    private Crono crono;
+
     [SerializeField] private AudioClip levelPassed;
     [SerializeField] private bool soundIsPlaying = false;
 
@@ -14,6 +25,7 @@ public class PointsHandler : MonoBehaviour
     void Start()
     {
         connectorHandler = GetComponent<ConnectorHandler>();
+        crono = GetComponent<Crono>();
         succesCanva.gameObject.SetActive(false);
     }
 
@@ -30,6 +42,13 @@ public class PointsHandler : MonoBehaviour
                 return;
         }
 
+        cameraOrbit.enabled = false;
+        crono.stopTime();
+        timeToReach = crono.totalTime - crono.getActualTime();
+        points += Mathf.FloorToInt(crono.getActualTime());
+        pointsText.text = points.ToString();
+        timeText.text = crono.parseTimer(timeToReach);
+        
         alreadyTriggered = true;
         StartCoroutine(EsperarYReproducirSonido(3f));
     }
