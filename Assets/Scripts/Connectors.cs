@@ -9,18 +9,26 @@ public class Connectors : MonoBehaviour
     public bool isConnected = false;
 
     [SerializeField] private ConnectorHandler connectorHandler;
+    [HideInInspector] public Connectors connectorInContact;
 
     private void OnTriggerEnter(Collider other)
     {
         Connectors otherConnector = other.GetComponent<Connectors>();
-
-        connectorHandler.RegisterConnectionAttempt(this, otherConnector);
+        if (otherConnector != null)
+        {
+            connectorInContact = otherConnector;
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
         Connectors otherConnector = other.GetComponent<Connectors>();
 
-        connectorHandler.UnregisterConnection(this, otherConnector);
+        if (otherConnector != null && connectorInContact == otherConnector)
+        {
+            connectorInContact = null;
+            connectorHandler.UnregisterConnection(this, otherConnector);
+        }
+        
     }
 }

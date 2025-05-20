@@ -7,6 +7,7 @@ public class PiecesMovement : MonoBehaviour
     public float rotationAngle = 90f; // Ángulo de inclinación de la bola  
     private bool isMoving = false; // Indica si la bola está en movimiento
     [SerializeField] private ArrowsHandler arrowsHandler; // Referencia al script ArrowsHandler
+    private ConnectorHandler connectorHandler; // Referencia al script ConnectorHandler
     private bool isSelected = false; // Nueva variable para saber si esta pieza está seleccionada
 
     private Rigidbody rb;
@@ -16,6 +17,7 @@ public class PiecesMovement : MonoBehaviour
     private void Awake()
     {
         arrowsHandler = GameObject.Find("ArrowsHandler").GetComponent<ArrowsHandler>(); 
+        connectorHandler = GameObject.Find("GameManager").GetComponent<ConnectorHandler>();
     }
 
     void Start()
@@ -106,5 +108,25 @@ public class PiecesMovement : MonoBehaviour
             Mathf.Round(transform.position.y),
             Mathf.Round(transform.position.z)
         );
+
+        VerificarConectores(); 
     }
+
+    private void VerificarConectores()
+    {
+        Connectors[] conectores = GetComponentsInChildren<Connectors>();
+
+        foreach (var conector in conectores)
+        {
+            if (conector.connectorInContact != null)
+            {
+                if (connectorHandler != null)
+                {
+                    connectorHandler.RegisterConnectionAttempt(conector, conector.connectorInContact);
+                }
+            }
+        }
+    }
+
+    public bool IsMoving { get { return isMoving; } set { isMoving = value; } }
 }
