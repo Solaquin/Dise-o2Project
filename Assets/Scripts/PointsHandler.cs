@@ -17,14 +17,23 @@ public class PointsHandler : MonoBehaviour
         succesCanva.gameObject.SetActive(false);
     }
 
-    void Update()
+
+    public void CheckLevelCompletion()
     {
-        if (connectorHandler.ConnectorsCount >= 3 && !alreadyTriggered)
+        if (alreadyTriggered) return;
+
+        GameObject[] allConnectors = GameObject.FindGameObjectsWithTag("Connector");
+        foreach (var connector in allConnectors)
         {
-            alreadyTriggered = true;
-            StartCoroutine(EsperarYReproducirSonido(3f));
+            Connectors connectorScript = connector.GetComponent<Connectors>();
+            if (connectorScript == null || !connectorScript.isConnected)
+                return;
         }
+
+        alreadyTriggered = true;
+        StartCoroutine(EsperarYReproducirSonido(3f));
     }
+
 
     IEnumerator EsperarYReproducirSonido(float secs)
     {

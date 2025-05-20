@@ -13,7 +13,6 @@ public class ButtonHoverAnimation : MonoBehaviour, IPointerEnterHandler, IPointe
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("Mouse enter: " + gameObject.name);
         animator.SetBool("Hover", true);
     }
 

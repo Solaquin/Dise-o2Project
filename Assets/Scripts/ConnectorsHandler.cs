@@ -1,29 +1,42 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class ConnectorHandler : MonoBehaviour
 {
-    private int connectorCount = 0;
     [SerializeField] private AudioClip succesConnectionAudio;
     [SerializeField] private AudioClip failConnectionAudio;
+    [SerializeField] private PointsHandler pointsHandler;
+
+    private List<(Connectors, Connectors)> activeConnections = new();
 
     public void RegisterConnectionAttempt(Connectors a, Connectors b)
     {
         if (a == null || b == null) return;
 
         bool isValid = IsConnectionValid(a, b);
-        connectorCount = isValid ? connectorCount + 1 : connectorCount;
 
         if (isValid)
         {
             SoundsController.Instance.EjecutarSonido(succesConnectionAudio);
+            a.isConnected = true;
+            b.isConnected = true;
+
+            activeConnections.Add((a, b));
+            pointsHandler.CheckLevelCompletion();
         }
         else
         {
             SoundsController.Instance.EjecutarSonido(failConnectionAudio);
         }
+    }
 
-        string msg = isValid ? "✅ Conexión válida" : "❌ Conexión inválida";
-        Debug.Log($"{msg} entre {a.connectorType}({a.connectorID}) y {b.connectorType}({b.connectorID}) - Conexiones correctas: {connectorCount / 2}");
+    public void UnregisterConnection(Connectors a, Connectors b)
+    {
+        if (a == null || b == null) return;
+
+        a.isConnected = false;
+        b.isConnected = false;
+
     }
 
     private bool IsConnectionValid(Connectors a, Connectors b)
@@ -50,11 +63,5 @@ public class ConnectorHandler : MonoBehaviour
         }
 
         return false;
-    }
-
-    public int ConnectorsCount
-    {
-        get { return connectorCount/2; }
-        set { connectorCount = value; }
     }
 }
